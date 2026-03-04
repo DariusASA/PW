@@ -9,17 +9,16 @@
 </head>
 
 <body>
-    
-   <script>
- alert( "Hello World!");
-</script> 
-    <header>Darius,Facultatea de Inginerie Electrica si Stiinta Calculatoarelor</header>
-    <nav><button><a href="https://intranet.unitbv.ro/#/">Intranet</a></button></nav>
+    <header>
+    <H1>Darius,Facultatea de Inginerie Electrica si Stiinta Calculatoarelor</H1>
+    <p>------------------------------</p>
+    </header>
+    <nav><button><a href="https://intranet.unitbv.ro/#/">Intranet</a></button>
+    <li id="darkmode" style="cursor: pointer;">🌙Dark Mode🌙</li>
+    </nav>
 <main>
     <p>----About me----</p>
-    
     <img src="Kangaroo1.jpg" alt="imagine" loading="lazy" style="width:500px;height:600px;">
-   
     <p>
     Lorem ipsum dolor sit amet consectet
     ur adipisicing elit. Accusantium de
@@ -28,37 +27,37 @@
     id dicta dolores corporis fugiat hic
     a. Fugiat soluta sapiente amet!
     </p>
-
+    
+    <h2>Educatie</h2>
+        <div class="section-content">
+            <p>asdfhggtredasdfgd</p>
+            <p>asdfhggtredasdfgd</p>
+            <p>asdfhggtredasdfgd</p>
+            <p>asdfhggtredasdfgd</p>
+        </div>
+    </div>
     <ol>
         Materii
         <li>matematica</li>
         <li>sport</li>
         <li>de</li>
     </ol>
-
     <aside>Hobby</aside>
     <aside>Cititul</aside>
     <aside>Motorsport</aside>
-
     <footer>Copyright 2026
-
-        
-        <script src="js/contact-form.js"> </script>
-        <form>
-            <label for="id_input">name</label><br>
-            <input type="name" id="name" autocomplete="name"><br>
-            <label for="id_input">email</label><br>
-            <input type="email" id="email" autocomplete="email" required><br>
-            <label for="id_input">message</label><br>
-            <textarea type="message" id="message" required minlength=10></textarea><br>
-           <button type="button" onclick="submitForm()">Submit</button><br>
-        </form>
-
+    <form>
+    <label for="name">name</label><br>
+    <input id="name" type="text" autocomplete="name" required /><br>
+    <label for="email">email</label><br>
+    <input type="email" id="email" autocomplete="email" required/><br>
+    <label for="message">message</label><br>
+    <textarea id="message" required minlength="10"></textarea><br>
+    <button type="submit">Submit</button><br>
+    <p id="form-feedback"></p>
+</form>
     </footer>
-
     </main>
-    
-    
-   
+    <script src="js/contact-form.js"> </script>
 </body>
 </html>
