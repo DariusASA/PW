@@ -36,7 +36,7 @@ function ProjectList() {
       
       <input 
         type="text" 
-        placeholder="Cauta un proiect..."
+        placeholder="Cauta"
         value={search} 
         onChange={(e) => setSearch(e.target.value)} 
       />

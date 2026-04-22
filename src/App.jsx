@@ -1,34 +1,20 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router';
+import Navbar from './Navbar';
+import Home from './pages/Home';
+import Projects from './pages/Projects';
+import Contact from './pages/Contact';
 import './App.css';
-import QuickNote from './QuickNote'; 
-import TodoList from './TodoList';
-import ContactForm from './ContactForm';
-import ProjectList from './ProjectList';
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  
-
   return (
-    <div>
-      <h1>TITLU------------------------</h1>
-      <p>Darius Asaragiu</p>
-
-      <QuickNote /> 
-      <TodoList />
-      <ContactForm />
-
-      <div>
-        <p>Ai apasat de {count} ori</p>
-        <button onClick={() => setCount(count + 1)}>+1</button>
-        <button onClick={() => setCount(count - 1)}>-1</button>
-        <button onClick={() => setCount(0)}>Reset</button>
-      </div>
-
-    
-      <ProjectList />
-    </div>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
