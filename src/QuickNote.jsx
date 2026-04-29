@@ -13,4 +13,4 @@ function QuickNote() {
  
  );
 }
-export default QuickNote;
+export default QuickNote; 
