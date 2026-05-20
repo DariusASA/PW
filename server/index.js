@@ -1,73 +1,85 @@
 const express = require('express');
-const app = express();
-const PORT = 3000;
+const cors = require('cors');
+const mongoose = require('mongoose');
 
+const app = express();
+
+app.use(cors());
 app.use(express.json());
 
-const projects = [
-  { id: 1, title: "Pagina Personala", tech: "HTML, CSS", done: true },
-  { id: 2, title: "Calculator Buget", tech: "JS", done: true },
-  { id: 3, title: "Dashboard React", tech: "React", done: false },
-  { id: 4, title: "API Meteo", tech: "React, API", done: false },
-];
+mongoose.connect('mongodb+srv://DariusPW:darius26@pw.1gjgqfw.mongodb.net/?appName=PW')
+  .then(function() { console.log('Conectat la MongoDB Atlas!'); })
+  .catch(function(err) { console.error('Eroare conectare MongoDB:', err); });
 
-app.get('/', function(req, res) {
-  res.json({ message: 'Serverul functioneaza!' });
-});
+const Project = require('./models/Project');
 
-app.get('/api/projects', function(req, res) {
-  res.json(projects);
-});
-
-app.get('/api/projects/:id', function(req, res) {
-  const project = projects.find(p => p.id === parseInt(req.params.id));
-  if (!project) {
-    return res.status(404).json({ error: 'Not found' });
+app.get('/api/projects', async function(req, res) {
+  try {
+    const projects = await Project.find();
+    res.json(projects);
+  } catch (err) {
+    res.status(500).json({ error: 'Eroare ' + err });
   }
-  res.json(project);
 });
 
-app.get('/api/stats', function(req, res) {
-  res.json({
-    total: projects.length,
-    finalizate: projects.filter(p => p.done).length,
-    inLucru: projects.filter(p => !p.done).length,
-  });
-});
-
-app.post('/api/projects', function(req, res) {
-  const newProject = {
-    id: projects.length + 1,
-    title: req.body.title,
-    tech: req.body.tech,
-    done: req.body.done || false,
-  };
-  projects.push(newProject);
-  res.status(201).json(newProject);
-});
-
-app.delete('/api/projects/:id', function(req, res) {
-  const id = parseInt(req.params.id);
-  const index = projects.findIndex(p => p.id === id);
-  if (index === -1) {
-    return res.status(404).json({ error: 'Not found' });
+app.post('/api/projects', async function(req, res) {
+  try {
+    const newProject = new Project({
+      title: req.body.title,
+      tech: req.body.tech,
+      done: req.body.done || false,
+    });
+    const saved = await newProject.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-  projects.splice(index, 1);
-  res.json({ message: 'Deleted' });
 });
 
-app.put('/api/projects/:id', function(req, res) {
-  const id = parseInt(req.params.id);
-  const project = projects.find(p => p.id === id);
-  if (!project) {
-    return res.status(404).json({ error: 'Not found' });
+app.get('/api/projects/:id', async function(req, res) {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) return res.status(404).json({ error: 'Proiectul nu a fost gasit' });
+    res.json(project);
+  } catch (err) {
+    res.status(500).json({ error: 'Eroare ' + err });
   }
-  if (req.body.title !== undefined) project.title = req.body.title;
-  if (req.body.tech !== undefined) project.tech = req.body.tech;
-  if (req.body.done !== undefined) project.done = req.body.done;
-  res.json(project);
 });
 
-app.listen(PORT, function() {
-  console.log('Server pornit pe http://localhost:' + PORT);
+app.put('/api/projects/:id', async function(req, res) {
+  try {
+    const updated = await Project.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ error: 'Not found' });
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete('/api/projects/:id', async function(req, res) {
+  try {
+    const deleted = await Project.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ error: 'Proiectul nu a fost gasit' });
+    res.json({ message: 'Deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Eroare ' + err });
+  }
+});
+
+app.get('/api/stats', async function(req, res) {
+  try {
+    const total = await Project.countDocuments();
+    const done = await Project.countDocuments({ done: true });
+    res.json({ total: total, done: done, inProgress: total - done });
+  } catch (err) {
+    res.status(500).json({ error: 'Eroare server: ' + err });
+  }
+});
+
+app.listen(3000, function() {
+  console.log('Server pornit pe http://localhost:3000');
 });
